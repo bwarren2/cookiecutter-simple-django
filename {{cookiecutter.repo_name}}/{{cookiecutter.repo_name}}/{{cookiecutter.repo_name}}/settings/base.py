@@ -1,17 +1,34 @@
 import sys
-from os.path import join, abspath, dirname
+from os.path import join, abspath, dirname, normpath, basename
+from os import getenv
+import dj_database_url
+from sys import path
 
 # PATH vars
 
-here = lambda *x: join(abspath(dirname(__file__)), *x)
-PROJECT_ROOT = here("..")
-root = lambda *x: join(abspath(PROJECT_ROOT), *x)
 
-sys.path.insert(0, root('apps'))
+BASE_DIR = dirname(dirname(abspath(__file__)))
+
+# PATH CONFIGURATION
+# Absolute filesystem path to the Django project directory:
+DJANGO_ROOT = dirname(dirname(dirname(abspath(__file__))))
+
+# Absolute filesystem path to the top-level project folder:
+SITE_ROOT = dirname(DJANGO_ROOT)
+
+# Site name:
+SITE_NAME = basename(DJANGO_ROOT)
+
+path.append(DJANGO_ROOT)
+
+sys.path.insert(
+    0,
+    normpath(join(SITE_ROOT, 'apps')),
+)
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'CHANGE THIS!!!'
+SECRET_KEY = getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -21,7 +38,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = (
+DJANGO_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -30,9 +47,27 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles'
 )
 
+THIRD_PARTY_APPS = (
+    'corsheaders',
+    # 'social.apps.django_app.default',
+    # 'storages',
+    # 'bootstrapform',
+    # 'corsheaders',
+    # 'payments',
+    # 'django_forms_bootstrap',
+    # 'tagging',
+    # 'mptt',
+    # 'rest_framework',
+)
+
+
+# Apps specific for this project go here.
+LOCAL_APPS = (
+)
+
 PROJECT_APPS = ()
 
-INSTALLED_APPS += PROJECT_APPS
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -42,6 +77,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 )
 
 ROOT_URLCONF = '{{cookiecutter.repo_name}}.urls'
@@ -52,16 +88,10 @@ WSGI_APPLICATION = '{{cookiecutter.repo_name}}.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '{{cookiecutter.repo_name}}',
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
-    }
-}
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(
+    default="postgres://localhost/{{cookiecutter.repo_name}}"
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -80,29 +110,42 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
-STATIC_URL = '/static/'
-
-MEDIA_ROOT = root('assets', 'uploads')
+# MEDIA CONFIGURATION
+MEDIA_ROOT = normpath(join(SITE_ROOT, 'media'))
 MEDIA_URL = '/media/'
+# END MEDIA CONFIGURATION
 
-# Additional locations of static files
 
+# STATIC FILE CONFIGURATION
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATIC_ROOT = normpath(join(DJANGO_ROOT, 'assets'))
+STATIC_URL = '/assets/'
+
+# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/
+#      #std:setting-STATICFILES_DIRS
+# Note: There is a presumption that the first entry here is 'static' so that
+# trash dirs work.
 STATICFILES_DIRS = (
-    root('assets'),
+    normpath(join(DJANGO_ROOT, 'static')),
 )
 
-TEMPLATE_DIRS = (
-    root('templates'),
-)
-
-
-# .local.py overrides all the common settings.
-try:
-    from .local import *
-except ImportError:
-    pass
-
-
-# importing test settings file if necessary
-if len(sys.argv) > 1 and 'test' in sys.argv[1]:
-    from .testing import *
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [normpath(join(DJANGO_ROOT, 'templates'))],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.core.context_processors.debug',
+                'django.core.context_processors.i18n',
+                'django.core.context_processors.media',
+                'django.core.context_processors.static',
+                'django.core.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.request',
+            ],
+        },
+    },
+]
