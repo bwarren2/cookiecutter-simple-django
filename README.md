@@ -22,7 +22,7 @@ Set up your virtualenv:
     $ source bin/activate
     $ pip install cookiecutter
 
-Now run it against this repo::
+Now run it against this repo:
 
     $ cd <your-workspace>
     $ cookiecutter  https://github.com/bwarren2/cookiecutter-simple-django.git
@@ -160,13 +160,13 @@ Stringing this all together, you might get a command list like:
 
 The structure used should look quite familiar:
 
-*Requirements*
+### Requirements
 
 The `requirements` folder contains a requirements file for each environment.
 
 If you need to add a dependency please choose the right file.
 
-*Settings*
+### Settings
 
 The `settings` folder contains a settings file for each environment and the `local` settings should be gitignored.
 
@@ -174,13 +174,13 @@ If you take a look at `base.py`, you'll see that it includes the optional module
 
 The `testing.py` module is loaded automatically after `base.py` and `local.py` every time you run `python ./manage.py test`.
 
-*Apps*
+### Apps
 
 The `apps` folder should contain all your local django apps, this is to keep
 the structure of the project clean.
 
 When it's time to `python ./manage.py startapp <name>`, just move the generated
-module to `apps`. If you want to know why this works, just take a look at the line::
+module to `apps`. If you want to know why this works, just take a look at the line:
 
     sys.path.insert(0, root('apps'))
 
@@ -192,25 +192,23 @@ in `settings/base.py`.
 Now, it's time to write the code!!!
 
 
-Not Exactly What You Want?
----------------------------
+# Not Exactly What You Want?
 
 This is what I want. *It might not be what you want.* Don't worry, you have options:
 
-Fork This
-~~~~~~~~~~
+## Fork This
 
 If you have differences in your preferred setup, I encourage you to fork this to create your own version.
 
 If branch this repo into something new, I encourage you to submit it to the following places:
 
-* cookiecutter_ so it gets listed in the README as a template.
-* The cookiecutter grid_ on Django Packages.
+* [cookiecutter](https://github.com/audreyr/cookiecutter) so it gets listed in the README as a template.
+* The [cookiecutter grid](https://www.djangopackages.com/grids/g/cookiecutter/) on Django Packages.
 
-.. _cookiecutter: https://github.com/audreyr/cookiecutter
-.. _grid: https://www.djangopackages.com/grids/g/cookiecutter/
-
-Or Submit a Pull Request
-~~~~~~~~~~~~~~~~~~~~~~~~~
+## Or Submit a Pull Request
 
 I also accept pull requests on this, if they're small, atomic, and if they make my own project development experience better.
+
+## Upcoming
+
+I might add a skeleton for the Celery side of a project.
