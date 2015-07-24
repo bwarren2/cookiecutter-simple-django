@@ -126,6 +126,7 @@ Stringing this all together, you might get a command list like:
     cd barfoo/barfoo/
     export DJANGO_SETTINGS_MODULE='barfoo.settings.local'
     export PYTHONPATH=`pwd`
+    export SECRET_KEY=mahsecret
     cd ..
 
     # Get grunt and bootstrap up
@@ -154,7 +155,6 @@ Stringing this all together, you might get a command list like:
 
     git push heroku master
     heroku logs -t -p web
-
 
 ## Structure
 
