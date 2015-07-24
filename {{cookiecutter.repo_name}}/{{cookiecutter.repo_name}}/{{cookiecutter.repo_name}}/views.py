@@ -2,4 +2,4 @@ from django.views.generic import TemplateView
 
 
 class BootstrapView(TemplateView):
-    template_name = 'blog/bootstrap_test.html'
+    template_name = 'bootstrap_test.html'
