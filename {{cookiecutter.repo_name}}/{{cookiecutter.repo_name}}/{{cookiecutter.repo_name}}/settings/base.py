@@ -1,4 +1,3 @@
-import sys
 from os.path import join, abspath, dirname, normpath, basename
 from os import getenv
 import dj_database_url
@@ -20,12 +19,6 @@ SITE_ROOT = dirname(DJANGO_ROOT)
 SITE_NAME = basename(DJANGO_ROOT)
 
 path.append(DJANGO_ROOT)
-
-sys.path.insert(
-    0,
-    normpath(join(SITE_ROOT, 'apps')),
-)
-
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = getenv("SECRET_KEY")

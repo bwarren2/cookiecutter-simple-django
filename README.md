@@ -174,19 +174,6 @@ If you take a look at `base.py`, you'll see that it includes the optional module
 
 The `testing.py` module is loaded automatically after `base.py` and `local.py` every time you run `python ./manage.py test`.
 
-### Apps
-
-The `apps` folder should contain all your local django apps, this is to keep
-the structure of the project clean.
-
-When it's time to `python ./manage.py startapp <name>`, just move the generated
-module to `apps`. If you want to know why this works, just take a look at the line:
-
-    sys.path.insert(0, root('apps'))
-
-in `settings/base.py`.
-
-
 # Done!
 
 Now, it's time to write the code!!!
